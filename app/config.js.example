@@ -1,0 +1,10 @@
+module.exports = {
+    websiteName: 'NOM DU SITE IMMO',
+    port : 3000,
+    db : {
+        user : '',
+        pwd: '',
+        cluster: '',
+        dbname: ''
+    }
+};

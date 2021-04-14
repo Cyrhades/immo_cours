@@ -1,0 +1,21 @@
+{
+  "name": "immo",
+  "version": "1.0.0",
+  "description": "Projet NodeJs d'une agence immobiliere",
+  "main": "server.js",
+  "scripts": {
+    "dev": "browser-refresh server.js",
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "LECOMTE Cyril",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "browser-refresh": "^1.7.3",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3",
+    "node-sass-middleware": "^0.11.0",
+    "pug": "^3.0.2"
+  }
+}
