@@ -2,7 +2,7 @@ let RepoUser = require('../repository/User.js');
 
 module.exports = class Register {
     printForm(request, response) {
-        response.render('register/form');  
+        response.render('register/form', {form: {}});  
     }
 
     processForm(request, response) {
@@ -24,20 +24,17 @@ module.exports = class Register {
                     form : entity 
                 }); 
             } else {
-                /**
-                 *  @todo
-                 *  Hasher le mot de passe
-                 */ 
+                /**  @todo Hasher le mot de passe **/
+                 
                 // sinon on tente de le créer
                 repo.add(entity).then((user) => {
-                    if(user === null) {
-                        //request.flash('error','Il y a eut un probleme');
-                        response.redirect('/inscription');
-                    }
-                    else {
-                        //request.flash('success','Vous etes bien inscris');
-                        response.redirect('/');
-                    }
+                    //request.flash('success','Vous etes bien inscris');
+                    response.redirect('/');
+                }, (err) => {
+                    response.render('register/form', { 
+                        error : `L'enregistrement en base de données a échoué`, 
+                        form : entity 
+                    }); 
                 });         
             }
         });
