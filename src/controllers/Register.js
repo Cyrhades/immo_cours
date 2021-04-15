@@ -24,13 +24,17 @@ module.exports = class Register {
                     form : entity 
                 }); 
             } else {
-                /**  @todo Hasher le mot de passe **/
-                 
+                let bcrypt = require('bcryptjs');
+                entity.password = bcrypt.hashSync(
+                    entity.password, 
+                    bcrypt.genSaltSync(10)
+                );
+
                 // sinon on tente de le créer
                 repo.add(entity).then((user) => {
-                    //request.flash('success','Vous etes bien inscris');
+                    request.flash('notify', 'Votre compte a bien été créé.');
                     response.redirect('/');
-                }, (err) => {
+                }, () => {
                     response.render('register/form', { 
                         error : `L'enregistrement en base de données a échoué`, 
                         form : entity 

@@ -6,6 +6,19 @@ const sassMiddleware = require('node-sass-middleware');
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
+//--------------------------------------------------------------------
+//      Ajout du midlleware express session
+//--------------------------------------------------------------------
+const session = require('express-session');
+app.use(session({
+    secret: config.appKey, resave:false, saveUninitialized:false, 
+    cookie: {maxAge: 3600000} 
+}));
+//--------------------------------------------------------------------
+//      Ajout du midlleware express flash messages
+//--------------------------------------------------------------------
+const flash = require('express-flash-messages');
+app.use(flash());
 
 //--------------------------------------------------------------------
 //      Gestinnaire sass

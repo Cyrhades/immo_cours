@@ -22,7 +22,13 @@ html(lang="fr")
                                 a.nav-link(href='/') Accueil
                             li.nav-item.active
                                 a.nav-link(href='/inscription') Inscription
-
+            - var messages = getMessages()
+            if messages.notify
+                each msg in messages.notify
+                    .alert.alert-info= msg
+            if messages.error
+                each msg in messages.error
+                    .alert.alert-danger= msg
             block content 
 
         block scripts 
