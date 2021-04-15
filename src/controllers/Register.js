@@ -6,10 +6,6 @@ module.exports = class Register {
     }
 
     processForm(request, response) {
-
-        if(request.body.phone.match(/^(?:0|\(?\+33\)?\s?|0033\s?)[1-79](?:[\.\-\s]?\d\d){4}$/) != true) {
-            // il y a une erreur
-        }
         let entity = {
             email : request.body.email || '',
             password : request.body.password || '', // devra être hashé
@@ -19,21 +15,31 @@ module.exports = class Register {
             phone: request.body.phone || ''
         };
 
-        /**
-         *  @todo
-         *  Vérifier adresse inexistante en BDD 
-         *  (si déja en BDD afficher msg erreur et réafficher formulaire pré-remplie)
-         *  Hasher le mot de passe
-         */ 
-        (new RepoUser).add(entity).then((user) => {
-            if(user === null) {
-                //request.flash('error','Il y a eut un probleme');
-                response.redirect('/inscription');
+        let repo = new RepoUser();
+        repo.emailExists(entity.email).then((result) => {
+            // si l'email existe deja dans la bdd
+            if(result === true) {
+                response.render('register/form', { 
+                    error : `Cette adresse email existe déjà dans notre base de données`, 
+                    form : entity 
+                }); 
+            } else {
+                /**
+                 *  @todo
+                 *  Hasher le mot de passe
+                 */ 
+                // sinon on tente de le créer
+                repo.add(entity).then((user) => {
+                    if(user === null) {
+                        //request.flash('error','Il y a eut un probleme');
+                        response.redirect('/inscription');
+                    }
+                    else {
+                        //request.flash('success','Vous etes bien inscris');
+                        response.redirect('/');
+                    }
+                });         
             }
-            else {
-                //request.flash('success','Vous etes bien inscris');
-                response.redirect('/');
-            }
-        });         
+        });
     }
 };

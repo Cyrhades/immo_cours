@@ -2,8 +2,10 @@ extends ../layout.pug
 
 block content
     h1 Inscription
-    
-    form(action='/register/inscription' method="post")
+    if error
+        .alert.alert-danger= error
+
+    form(action='/inscription' method="post")
         .input-group.mb-3
             span.input-group-prepend
                 span.input-group-text.d-none.d-lg-block 

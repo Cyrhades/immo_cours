@@ -18,8 +18,18 @@ module.exports = class User {
     }
 
     add(userEntity) {
-        return new Promise((resolve) => {
-            this.db.create(userEntity);
-        });
+        return this.db.create(userEntity);
+    }
+
+    emailExists(email) {
+        return new Promise((resolve, reject) => {
+            this.db.findOne({ email }, (err, User) => {
+                // si pas d'erreur, email trouvé
+                if (!err && User !== null) {
+                   resolve(true);
+                }  
+                resolve(false);
+            })
+        })
     }
 } 
