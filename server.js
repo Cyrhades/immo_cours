@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //       permet d'envoyer des variables à toutes les vues
 //-------------------------------------------------------------------- 
 app.use((req,res,next) => {
-
+    res.locals.session = req.session;
     res.locals.websiteName = config.websiteName; 
     next();
 });

@@ -14,4 +14,19 @@ module.exports = (app) => {
         let Register = require('../src/controllers/Register.js');
         (new Register()).processForm(req, res);
     });
+
+    app.get('/connexion', (req, res) => {
+        let Authenticated = require('../src/controllers/Authenticated.js');
+        (new Authenticated()).printForm(req, res);
+    });
+
+    app.post('/connexion', (req, res) => {
+        let Authenticated = require('../src/controllers/Authenticated.js');
+        (new Authenticated()).processForm(req, res);
+    });
+
+    app.get('/deconnexion', (req, res) => {
+        let Authenticated = require('../src/controllers/Authenticated.js');
+        (new Authenticated()).disconnect(req, res);
+    });
 };

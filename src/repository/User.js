@@ -28,10 +28,23 @@ module.exports = class User {
 
     emailExists(email) {
         return new Promise((resolve, reject) => {
-            this.db.findOne({ email }, (err, User) => {
+            this.db.findOne({ email }, (err, user) => {
                 // si pas d'erreur, email trouvé
-                if (!err && User !== null) {
+                if (!err && user !== null) {
                    resolve(true);
+                }  
+                resolve(false);
+            })
+        })
+    }
+
+
+    getUserByEmail(email) {
+        return new Promise((resolve, reject) => {
+            this.db.findOne({ email }, (err, user) => {
+                // si pas d'erreur, email trouvé
+                if (!err && user !== null) {
+                   resolve(user);
                 }  
                 resolve(false);
             })

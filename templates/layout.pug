@@ -20,8 +20,14 @@ html(lang="fr")
                         ul.navbar-nav.mr-auto.mt-2.mt-lg-0
                             li.nav-item.active
                                 a.nav-link(href='/') Accueil
-                            li.nav-item.active
-                                a.nav-link(href='/inscription') Inscription
+                            if session.user 
+                                li.nav-item.active
+                                    a.nav-link(href='/deconnexion') Se déconnecter                       
+                            else
+                                li.nav-item.active
+                                    a.nav-link(href='/inscription') Inscription
+                                li.nav-item.active
+                                    a.nav-link(href='/connexion') Connexion                         
             - var messages = getMessages()
             if messages.notify
                 each msg in messages.notify
