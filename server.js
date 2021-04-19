@@ -5,7 +5,7 @@ const config = require('./app/config');
 const sassMiddleware = require('node-sass-middleware');
 
 var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 //--------------------------------------------------------------------
 //      Ajout du midlleware express session
 //--------------------------------------------------------------------
