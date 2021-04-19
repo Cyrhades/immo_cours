@@ -5,7 +5,7 @@ const config = require('./app/config');
 const sassMiddleware = require('node-sass-middleware');
 
 var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 //--------------------------------------------------------------------
 //      Ajout du midlleware express session
 //--------------------------------------------------------------------
@@ -28,7 +28,7 @@ app.use(sassMiddleware({
     src: path.join(__dirname, 'build'),
     dest: path.join(__dirname, 'public'),
     debug: false,
-    indentedSyntax: false, // true Compiles files with the .sass extension
+    indentedSyntax: true, // true Compiles files with the .sass extension
     outputStyle: 'compressed'
 }));
 
@@ -49,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req,res,next) => {
     res.locals.session = req.session;
     res.locals.websiteName = config.websiteName; 
+    res.locals.route = req._parsedUrl.pathname;
     next();
 });
 
