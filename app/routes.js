@@ -36,4 +36,13 @@ module.exports = (app) => {
         (new Dashboard()).print(req, res);
     });
 
+    app.get('/admin/realty', (req, res) => {
+        let Realty = require('../src/controllers/Realty.js');
+        (new Realty()).print(req, res);
+    });
+
+    app.get('/admin/realty/add', (req, res) => {
+        let Realty = require('../src/controllers/Realty.js');
+        (new Realty()).printForm(req, res);
+    });
 };

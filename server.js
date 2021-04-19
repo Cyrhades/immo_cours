@@ -42,7 +42,8 @@ app.set('view engine', 'pug');
 //      Mise en place du répertoire static
 //--------------------------------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
- 
+
+
 //--------------------------------------------------------------------
 //       permet d'envoyer des variables à toutes les vues
 //-------------------------------------------------------------------- 
