@@ -45,11 +45,21 @@ module.exports = class Realty {
         });
     }
 
-    find(search = {}) {
+    find(filter = {}) {
         return new Promise((resolve, reject) => {
-            this.db.find(search, function (err, realty) {
+            this.db.find(filter, function (err, realty) {
                 if (err) reject(err);
                 resolve(realty);
+            });
+        });
+    }
+
+    delete(filter = {}) {
+        return new Promise((resolve, reject) => {
+            this.db.deleteOne(filter, function (err) {
+                console.log(err);
+                if (err) reject(err);
+                resolve();
             });
         });
     }
