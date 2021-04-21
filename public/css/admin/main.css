@@ -108,3 +108,8 @@ body {
   .lcUpload__file{ position:absolute;top:0;left:0; height:100%;width:100%;visibility:hidden; }
   .lcUpload__input, .lcUpload__input label{ position:absolute;top:0;left:0; height:100%;width:100%; margin-top:35px;}
   
+
+a.dropdown-toggle {
+  color: black;
+  text-decoration: none;
+}

@@ -4,20 +4,24 @@ module.exports = class Realty {
 
     print(request, response) {
         if(typeof request.session.user !== 'undefined') {
-            response.render('admin/realty/list');
-            return;
+            let repo = new RepoRealty();
+            repo.find().then((realties) => {
+                response.render('admin/realty/list', {realties});
+            });
+        } else {
+            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
+            response.redirect('/connexion');  
         }
-        request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-        response.redirect('/connexion');  
     }
 
     printForm(request, response) {
-        if(typeof request.session.user !== 'undefined') {
-            response.render('admin/realty/form');
+        if(typeof request.session === 'undefined' || typeof request.session.user === 'undefined') {
+            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
+            response.redirect('/connexion');  
             return;
         }
-        request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-        response.redirect('/connexion');  
+  
+        response.render('admin/realty/form');
     }
 
     processForm(request, response) {

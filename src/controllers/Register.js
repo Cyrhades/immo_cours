@@ -1,11 +1,13 @@
 let RepoUser = require('../repository/User.js');
 
 module.exports = class Register {
+    
     printForm(request, response) {
         response.render('register/form', {form: {}});  
     }
 
     processForm(request, response) {
+
         let entity = {
             email : request.body.email || '',
             password : request.body.password || '', // devra être hashé
