@@ -20,8 +20,44 @@ module.exports = class Realty {
             response.redirect('/connexion');  
             return;
         }
-  
-        response.render('admin/realty/form');
+        // on est en modification
+        if(typeof request.params.id !== 'undefined') {
+            let repo = new RepoRealty();
+            repo.findById(request.params.id).then((realty) => {
+                response.render('admin/realty/form', {form : realty});
+            }, () => {
+                request.flash('error',`Le bien n'a pas été trouvé`)
+                response.redirect('/admin/realty');
+            });   
+        } 
+        // on est en ajout
+        else {
+            response.render('admin/realty/form', {form: { contact: {}, address : {}}});
+        }
+    }
+
+
+    processEdit(request, response) {
+        if(typeof request.session === 'undefined' || typeof request.session.user === 'undefined') {
+            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
+            response.redirect('/connexion');  
+            return;
+        }
+
+        // on est en modification
+        if(typeof request.params.id !== 'undefined') {
+            // Ce cas ne peux arriver que si le formulaire a été modifé 
+            if(request.body.realty == undefined || request.body.contact == undefined) {
+                request.flash('error', `Le formulaire n'a pas été soumis correctement.`);
+                response.redirect('/admin/realty/edit/'+request.params.id);  
+            }
+            
+        } 
+        // on est en ajout
+        else {
+            request.flash('error',`Le bien n'a pas été trouvé`)
+            response.redirect('/admin/realty');
+        }
     }
 
     processForm(request, response) {
@@ -31,11 +67,11 @@ module.exports = class Realty {
             return;
         }
         // Ce cas ne peux arriver que si le formulaire a été modifé 
-        if(request.body.realty == undefined || request.body.contact == undefined) {
+        if(typeof request.body.realty == 'undefined' || typeof request.body.contact == 'undefined') {
             request.flash('error', `Le formulaire n'a pas été soumis correctement.`);
             response.redirect('/admin/realty/add');  
         }
-
+        console.log(request.body);
         let entity =  {
             address : {
                 seller : request.body.realty.seller,
@@ -66,7 +102,8 @@ module.exports = class Realty {
         };
 
         let repo = new RepoRealty();
-        repo.add(entity).then((user) => {
+        console.log(entity);
+        repo.add(entity).then(() => {
             request.flash('notify', 'Le bien a été créé.');
             response.redirect('/admin/realty');
         }, () => {
