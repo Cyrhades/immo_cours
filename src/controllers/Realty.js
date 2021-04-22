@@ -37,28 +37,6 @@ module.exports = class Realty {
     }
 
 
-    processEdit(request, response) {
-        if(typeof request.session === 'undefined' || typeof request.session.user === 'undefined') {
-            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-            response.redirect('/connexion');  
-            return;
-        }
-
-        // on est en modification
-        if(typeof request.params.id !== 'undefined') {
-            // Ce cas ne peux arriver que si le formulaire a été modifé 
-            if(request.body.realty == undefined || request.body.contact == undefined) {
-                request.flash('error', `Le formulaire n'a pas été soumis correctement.`);
-                response.redirect('/admin/realty/edit/'+request.params.id);  
-            }
-            
-        } 
-        // on est en ajout
-        else {
-            request.flash('error',`Le bien n'a pas été trouvé`)
-            response.redirect('/admin/realty');
-        }
-    }
 
     processForm(request, response) {
         if(typeof request.session === 'undefined' || typeof request.session.user === 'undefined') {
@@ -71,7 +49,7 @@ module.exports = class Realty {
             request.flash('error', `Le formulaire n'a pas été soumis correctement.`);
             response.redirect('/admin/realty/add');  
         }
-        console.log(request.body);
+
         let entity =  {
             address : {
                 seller : request.body.realty.seller,
@@ -102,9 +80,18 @@ module.exports = class Realty {
         };
 
         let repo = new RepoRealty();
-        console.log(entity);
-        repo.add(entity).then(() => {
-            request.flash('notify', 'Le bien a été créé.');
+        let promise;
+        if(typeof request.params.id !== 'undefined') {
+            promise = repo.updateById(request.params.id, entity);
+        } else {
+            promise = repo.add(entity);
+        }
+        promise.then(() => {
+            if(typeof request.params.id !== 'undefined') {
+                request.flash('notify', 'Le bien a été modifié.');
+            } else {
+                request.flash('notify', 'Le bien a été créé.');
+            }
             response.redirect('/admin/realty');
         }, () => {
             response.render('register/form', { 

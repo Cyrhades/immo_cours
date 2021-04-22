@@ -45,6 +45,15 @@ module.exports = class Realty {
         });
     }
 
+    updateById(id, realtyEntity ) {
+        return new Promise((resolve, reject) => {
+            this.db.updateOne({_id : id}, realtyEntity, function (err) {
+                if (err) reject();
+                resolve();
+            });
+        });
+    }
+
     find(filter = {}) {
         return new Promise((resolve, reject) => {
             this.db.find(filter, function (err, realty) {

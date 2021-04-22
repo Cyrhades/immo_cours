@@ -63,6 +63,6 @@ module.exports = (app) => {
 
     app.post('/admin/realty/edit/:id', (req, res) => {
         let Realty = require('../src/controllers/Realty.js');
-        (new Realty()).processEdit(req, res);
+        (new Realty()).processForm(req, res);
     });
 };
