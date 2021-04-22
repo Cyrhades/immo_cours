@@ -36,6 +36,15 @@ module.exports = class Realty {
         this.db = mongoose.model('Realty', RealtySchema); 
     }
 
+    count(filter = {}) {
+        return new Promise((resolve, reject) => {
+            this.db.count(filter, function (err, data) {
+                if (err) reject(err);
+                resolve(data);
+            });
+        });
+    }
+
     add(realtyEntity) {
         return new Promise((resolve, reject) => {
             this.db.create(realtyEntity, function (err, realty) {
@@ -54,11 +63,11 @@ module.exports = class Realty {
         });
     }
 
-    find(filter = {}) {
+    find(filter = {}, limit = null, skip = null) {
         return new Promise((resolve, reject) => {
-            this.db.find(filter, function (err, realty) {
+            this.db.find(filter).limit(limit).skip(skip).exec(function (err, data) {
                 if (err) reject(err);
-                resolve(realty);
+                resolve(data);
             });
         });
     }

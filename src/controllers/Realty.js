@@ -4,9 +4,22 @@ module.exports = class Realty {
 
     print(request, response) {
         if(typeof request.session.user !== 'undefined') {
+            //let page = parseInt(request.params.page) || 1;
+            let page = parseInt(request.query.page) || 1;
+            let limit = 10; // nombre d'éléments par page
+            let offset = (limit*page)-limit;
+
             let repo = new RepoRealty();
-            repo.find().then((realties) => {
-                response.render('admin/realty/list', {realties});
+            repo.count({}).then((count) => {
+                let last = Math.ceil(count/limit);
+                // // le filtre sera le même que dans countBy
+                repo.find({}, limit, offset).then((realties) => {
+                    response.render('admin/realty/list', {
+                        realties,
+                        page,
+                        last
+                    }); 
+                });
             });
         } else {
             request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
@@ -35,7 +48,6 @@ module.exports = class Realty {
             response.render('admin/realty/form', {form: { contact: {}, address : {}}});
         }
     }
-
 
 
     processForm(request, response) {
