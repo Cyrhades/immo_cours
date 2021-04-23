@@ -4,7 +4,12 @@ module.exports = (app) => {
         let Home = require('../src/controllers/Home.js');
         (new Home()).print(req, res);
     });
-    
+
+    app.get('/annonce/:id', (req, res) => {
+        let Announce = require('../src/controllers/Announce.js');
+        (new Announce()).print(req, res);
+    });
+
     app.get('/inscription', (req, res) => {
         let Register = require('../src/controllers/Register.js');
         (new Register()).printForm(req, res);
