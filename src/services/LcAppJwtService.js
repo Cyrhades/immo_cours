@@ -7,19 +7,18 @@ module.exports = (app) => {
         // Récupération du token dans le cookie
         let token = new Cookies(req,res).get('access_token');
         // Si le cookie (access_token) n'existe pas
-        if (token == null) {
-            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-            response.redirect('/connexion');  
-        } else {
+        if (token !== null && token !== undefined) {
             // sinon on vérifie le jwt
             jwt.verify(token, config.appKey, (err, dataJwt) => { 
                 // Erreur du JWT (n'est pas un JWT, a été modifié, est expiré)
                 if(err) return res.sendStatus(403);
                 res.locals.user = dataJwt;
                 res.locals.user.connected = true;
+                next();
             });
+        } else {
+            next();
         }
-        next();
     });
 
     // Ajout du middleware du controle d'accès à l'administration avec les JWT

@@ -38,7 +38,9 @@ module.exports = class Authenticated {
     }
 
     disconnect(request, response) {
-        request.session.user = null;
+        //request.session.user = null;
+        let Cookies = require( "cookies" );
+        new Cookies(request, response).set('access_token', null, {maxAge:0});
         request.flash('notify', 'Vous êtes maintenant déconnecté.');
         response.redirect('/');
     }
