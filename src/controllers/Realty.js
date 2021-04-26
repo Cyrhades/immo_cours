@@ -106,10 +106,8 @@ module.exports = class Realty {
             }
             response.redirect('/admin/realty');
         }, () => {
-            response.render('register/form', { 
-                error : `L'enregistrement du bien a échoué`, 
-                form : entity 
-            });
+            request.flash('error', `L'enregistrement a échoué.`);
+            response.redirect('/admin/realty/add');  
         });         
     }
 

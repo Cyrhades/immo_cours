@@ -26,10 +26,14 @@ const RealtySchema = mongoose.Schema({
     percentage_commission: { type: Number },
     area : {type: Number},
     room: { type: Number },
-    info_realty: { type: String }
+    info_realty: { type: String },
+    slug: { type: String, slug: ['address.zipcode','address.city'], unique:true }
 }, {
     versionKey: false // You should be aware of the outcome after set to false
 });
+
+var slug = require('mongoose-slug-updater');
+mongoose.plugin(slug);
 
 module.exports = class Realty {
     constructor() {
@@ -38,7 +42,7 @@ module.exports = class Realty {
 
     count(filter = {}) {
         return new Promise((resolve, reject) => {
-            this.db.count(filter, function (err, data) {
+            this.db.countDocuments(filter, function (err, data) {
                 if (err) reject(err);
                 resolve(data);
             });
