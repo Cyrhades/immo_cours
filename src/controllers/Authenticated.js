@@ -1,4 +1,5 @@
 let RepoUser = require('../repository/User.js');
+let config = require('../../app/config.js');
 
 module.exports = class Authenticated {
     printForm(request, response) {
@@ -9,7 +10,17 @@ module.exports = class Authenticated {
         (new RepoUser).getUserByEmail(request.body.email).then((user) => {
             let bcrypt = require('bcryptjs');
             if(bcrypt.compareSync(request.body.password, user.password)) {
-                request.session.user = user;
+                //request.session.user = user;
+                let jwt = require('jsonwebtoken');
+                let Cookies = require( "cookies" );
+                let accessToken = jwt.sign({
+                    username: user.email, 
+                    firstname : user.firstname, 
+                    lastname: user.lastname, 
+                    role: user.role
+                }, config.appKey, {expiresIn: 604800});   
+
+                new Cookies(request, response).set('access_token', accessToken, {httpOnly: true, secure: false });
                 request.flash('notify', 'Vous êtes maintenant connecté.');
                 response.redirect('/');
             } else {

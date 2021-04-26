@@ -1,5 +1,8 @@
 module.exports = (app) => {
 
+    // Ajout du middleware gestion des JWT
+    require('../src/services/LcAppJwtService.js')(app);
+
     app.get('/', (req, res) => {
         let Home = require('../src/controllers/Home.js');
         (new Home()).print(req, res);
@@ -34,7 +37,7 @@ module.exports = (app) => {
         let Authenticated = require('../src/controllers/Authenticated.js');
         (new Authenticated()).disconnect(req, res);
     });
-
+    
     app.get('/admin', (req, res) => {
         let Dashboard = require('../src/controllers/Dashboard.js');
         (new Dashboard()).print(req, res);

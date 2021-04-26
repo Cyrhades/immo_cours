@@ -3,36 +3,27 @@ let RepoRealty = require('../repository/Realty.js');
 module.exports = class Realty {
 
     print(request, response) {
-        if(typeof request.session.user !== 'undefined') {
-            //let page = parseInt(request.params.page) || 1;
-            let page = parseInt(request.query.page) || 1;
-            let limit = 10; // nombre d'éléments par page
-            let offset = (limit*page)-limit;
+        //let page = parseInt(request.params.page) || 1;
+        let page = parseInt(request.query.page) || 1;
+        let limit = 10; // nombre d'éléments par page
+        let offset = (limit*page)-limit;
 
-            let repo = new RepoRealty();
-            repo.count({}).then((count) => {
-                let last = Math.ceil(count/limit);
-                // // le filtre sera le même que dans countBy
-                repo.find({}, limit, offset).then((realties) => {
-                    response.render('admin/realty/list', {
-                        realties,
-                        page,
-                        last
-                    }); 
-                });
+        let repo = new RepoRealty();
+        repo.count({}).then((count) => {
+            let last = Math.ceil(count/limit);
+            // // le filtre sera le même que dans countBy
+            repo.find({}, limit, offset).then((realties) => {
+                response.render('admin/realty/list', {
+                    realties,
+                    page,
+                    last
+                }); 
             });
-        } else {
-            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-            response.redirect('/connexion');  
-        }
+        });       
     }
 
     printForm(request, response) {
-        if(typeof request.session === 'undefined' || typeof request.session.user === 'undefined') {
-            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-            response.redirect('/connexion');  
-            return;
-        }
+
         // on est en modification
         if(typeof request.params.id !== 'undefined') {
             let repo = new RepoRealty();
@@ -51,11 +42,7 @@ module.exports = class Realty {
 
 
     processForm(request, response) {
-        if(typeof request.session === 'undefined' || typeof request.session.user === 'undefined') {
-            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-            response.redirect('/connexion');  
-            return;
-        }
+
         // Ce cas ne peux arriver que si le formulaire a été modifé 
         if(typeof request.body.realty == 'undefined' || typeof request.body.contact == 'undefined') {
             request.flash('error', `Le formulaire n'a pas été soumis correctement.`);
@@ -113,12 +100,6 @@ module.exports = class Realty {
 
 
     delete(request, response) {
-        if(typeof request.session === 'undefined' || typeof request.session.user === 'undefined') {
-            request.flash('error', `Vous devez être connecté pour accéder à l'administration.`);
-            response.redirect('/connexion');  
-            return;
-        }
-
         if(request.params.id != undefined && request.params.id != '') {
             let repo = new RepoRealty();
             repo.delete({_id : request.params.id}).then(() => {
