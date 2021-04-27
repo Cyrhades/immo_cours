@@ -1,9 +1,12 @@
 module.exports = (app) => {
 
-    // Ajout du middleware gestion des JWT
+    // Ajout du middleware de gestion des JWT
     require('../src/services/LcAppJwtService.js')(app);
 
-    app.get('/', (req, res) => {
+    // Ajout du middleware de gestion des CSRF
+    const token = require('../src/services/LcCsrfToken.js')(app);
+
+    app.get('/', token.generate, (req, res) => {
         let Home = require('../src/controllers/Home.js');
         (new Home()).print(req, res);
     });
@@ -13,7 +16,7 @@ module.exports = (app) => {
         (new Announce()).print(req, res);
     });
 
-    app.get('/inscription', (req, res) => {
+    app.get('/inscription',  token.generate, (req, res) => {
         let Register = require('../src/controllers/Register.js');
         (new Register()).printForm(req, res);
     });
@@ -23,7 +26,7 @@ module.exports = (app) => {
         (new Register()).processForm(req, res);
     });
 
-    app.get('/connexion', (req, res) => {
+    app.get('/connexion', token.generate, (req, res) => {
         let Authenticated = require('../src/controllers/Authenticated.js');
         (new Authenticated()).printForm(req, res);
     });
@@ -48,7 +51,7 @@ module.exports = (app) => {
         (new Realty()).print(req, res);
     });
 
-    app.get('/admin/realty/add', (req, res) => {
+    app.get('/admin/realty/add', token.generate, (req, res) => {
         let Realty = require('../src/controllers/Realty.js');
         (new Realty()).printForm(req, res);
     });
@@ -64,7 +67,7 @@ module.exports = (app) => {
     });
 
 
-    app.get('/admin/realty/edit/:id', (req, res) => {
+    app.get('/admin/realty/edit/:id', token.generate, (req, res) => {
         let Realty = require('../src/controllers/Realty.js');
         (new Realty()).printForm(req, res);
     });

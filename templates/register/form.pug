@@ -6,6 +6,7 @@ block content
         .alert.alert-danger= error
 
     form(action='/inscription' method="post")
+        :csrf
         .input-group.mb-3
             span.input-group-prepend
                 span.input-group-text.d-none.d-lg-block 
