@@ -12,9 +12,9 @@ describe(`Création d'un token csrf`, () => {
 
     it(`Test après la generation d'un CSRF`, (done) => {
         token.generate(stubRequest, stubResponse, ()=>{});
-        assert.notStrictEqual(typeof stubRequest.session.token_csrf, 'undefined');
-        assert.notStrictEqual(typeof stubResponse.locals.token_csrf, 'undefined');
-        assert.notStrictEqual(stubResponse.locals.token_csrf, stubRequest.session.token_csrf);
+        assert.strictEqual(stubResponse.locals.token_csrf, stubRequest.session.token_csrf);
+        assert.strictEqual((new RegExp('[0-9a-f]{40}')).test(stubResponse.locals.token_csrf), true);
+
         done();
     });
 
