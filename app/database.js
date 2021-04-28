@@ -7,5 +7,5 @@ mongoose.connect(
 );
 const db = mongoose.connection;
 db.once('open', () => {
-   console.log(`connexion OK !`);
+   //console.log(`connexion OK !`);
 });

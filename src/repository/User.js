@@ -35,8 +35,8 @@ module.exports = class User {
                    resolve(true);
                 }  
                 resolve(false);
-            })
-        })
+            });
+        });
     }
 
     getUserByEmail(email) {
@@ -48,6 +48,6 @@ module.exports = class User {
                 }  
                 reject(false);
             });
-        })
+        });
     }
 } 
