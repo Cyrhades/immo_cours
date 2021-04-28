@@ -14,6 +14,7 @@ describe(`Création d'un token csrf`, () => {
         token.generate(stubRequest, stubResponse, ()=>{});
         assert.notStrictEqual(typeof stubRequest.session.token_csrf, 'undefined');
         assert.notStrictEqual(typeof stubResponse.locals.token_csrf, 'undefined');
+        assert.notStrictEqual(stubResponse.locals.token_csrf, stubRequest.session.token_csrf);
         done();
     });
 
