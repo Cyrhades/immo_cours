@@ -1,6 +1,6 @@
 const assert = require('assert');
 let stubRequest = { session : {} };
-let stubResponse = { locals : {}, status : (code) => {}, send : (message) => {} };
+let stubResponse = { locals : {}, status : (code) => { return stubResponse; }, send : (message) => { stubResponse.message = message; } };
 const token = require('../src/services/LcCsrfToken.js')();
 
 describe(`Création d'un token csrf`, () => {
@@ -24,8 +24,16 @@ describe(`Création d'un token csrf`, () => {
     });
 
     it(`Test de la vérification d'un CSRF incorrect`, (done) => {
-        stubRequest.body = { csrf : stubResponse.locals.token_csrf} 
-        // @todo
+        stubRequest.body = { csrf : 'Mauvais token'} 
+        token.verify(stubRequest, stubResponse, () => true)
+        assert.strictEqual(stubResponse.message, 'Cross-site request forgery détecté!');
+        done();
+    });
+
+    it(`Test de la vérification sans CSRF`, (done) => {
+        stubRequest.body = {};
+        token.verify(stubRequest, stubResponse, () => true)
+        assert.strictEqual(stubResponse.message, 'Cross-site request forgery détecté!');
         done();
     });
 });
