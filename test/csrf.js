@@ -1,6 +1,6 @@
 const assert = require('assert');
 let stubRequest = { session : {} };
-let stubResponse = { locals : {}, status : (code) => { return stubResponse; }, send : (message) => { stubResponse.message = message; } };
+let stubResponse = { locals : {}, status : (code) => {stubResponse.status = code; return stubResponse; }, send : (message) => { stubResponse.message = message; } };
 const token = require('../src/services/LcCsrfToken.js')();
 
 describe(`Création d'un token csrf`, () => {
