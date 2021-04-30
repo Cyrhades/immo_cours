@@ -1,11 +1,19 @@
 module.exports = {
     appKey: '',
     websiteName: 'NOM DU SITE IMMO',
+    directory_product_image : __dirname+'/../public/images/realties/',
     port : 3000,
     db : {
         user : '',
         pwd: '',
         cluster: '',
         dbname: ''
+    },
+    smtp: {
+        service: 'gmail',
+        auth: {
+            user: '*********@gmail.com',
+            pass: '*********'
+        }
     }
 };

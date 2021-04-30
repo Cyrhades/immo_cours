@@ -18,7 +18,7 @@ module.exports = (app = null) => {
             res.locals.token_csrf = req.session.token_csrf;
             return next();
         },
-        verify : (req, res, next) => {    
+        verify : (req, res, next) => {
             if (typeof req.session == 'undefined') { console.warn(`Please install express-session and add in middleware`); }
             // si il n'y a pas la clé csrf ou qu'elle ne correspond pas
             if (!('csrf' in req.body && req.body.csrf === req.session.token_csrf && req.body.csrf !== '')) {

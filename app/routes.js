@@ -41,11 +41,22 @@ module.exports = (app) => {
         (new Authenticated()).disconnect(req, res);
     });
     
+    app.get('/mot_de_passe_oublie', (req, res) => {
+        let ResetPassword = require('../src/controllers/ResetPassword.js');
+        (new ResetPassword).print(req, res);
+    });
+    app.post('/mot_de_passe_oublie', (req, res) => {
+        let ResetPassword = require('../src/controllers/ResetPassword.js');
+        (new ResetPassword).process(req, res, app);
+    });
+
+
+
+
     app.get('/admin', (req, res) => {
         let Dashboard = require('../src/controllers/Dashboard.js');
         (new Dashboard()).print(req, res);
     });
-
 
     //---------------------------------------------------------
     //  ADMIN Realty
@@ -54,7 +65,12 @@ module.exports = (app) => {
     let Realty = new RealtyController();
     app.get('/admin/realty', Realty.print.bind(Realty));
     app.get('/admin/realty/add', token.generate, Realty.printForm);
-    app.post('/admin/realty/add', token.verify, Realty.processForm);
+    app.post('/admin/realty/add',   
+        require('express-fileupload')({createParentPath: true}),
+        require('../src/services/LcParserService.js'),  
+        token.verify, 
+        Realty.processForm
+    );
     app.get('/admin/realty/delete/:id', Realty.delete);
     app.get('/admin/realty/edit/:id', token.generate, Realty.printForm);
     app.post('/admin/realty/edit/:id', token.verify, Realty.processForm);

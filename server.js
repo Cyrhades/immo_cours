@@ -49,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req,res,next) => {
     //res.locals.session = req.session;
     res.locals.user = {};
+    res.locals.url = `${req.protocol}://${req.headers.host}`;
     res.locals.websiteName = config.websiteName; 
     res.locals.route = req._parsedUrl.pathname;
     next();
