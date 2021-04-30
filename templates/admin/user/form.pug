@@ -1,0 +1,64 @@
+extends ../layout.pug
+block breadcrumb  
+    li
+        a(href='#')
+            em.fa.fa-user &nbsp;
+    li utilisateurs 
+    li &nbsp; / &nbsp;
+    li(class='active') Création d'un utilisateur
+        
+block content
+    .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+        h1.h2 Enregistrer un utilisateur
+        .btn-toolbar.mb-2.mb-md-0
+            a.btn.btn-small.btn-secondary(href="/admin/user") Liste des utilisateurs
+    .row
+        form(role="form" method="post")
+            :csrf
+            .input-group.mb-3
+                span.input-group-prepend
+                    span.input-group-text.d-none.d-lg-block 
+                        i.fa.fa-envelope 
+                input(type="email" class="form-control" placeholder="Email" name="email" value=form.email)     
+
+            hr
+
+            .input-group.mb-3
+                .input-group-prepend
+                    .input-group-text.d-none.d-lg-block 
+                        i.fa.fa-restroom
+                select(class="form-control" placeholder="Civilité" name="civility")
+                    option(value="1") Monsieur
+                    if form.civility == 2
+                        option(value="2" selected) Madame
+                    else
+                        option(value="2" ) Madame
+
+            .input-group.mb-3
+                .input-group-prepend
+                    .input-group-text.d-none.d-lg-block
+                        i.fa.fa-user
+                input(type="text" class="form-control" placeholder="Nom" name="lastname" value=form.lastname)
+
+            .input-group.mb-3
+                .input-group-prepend
+                    .input-group-text.d-none.d-lg-block 
+                        i.fa.fa-user
+                input(type="text" class="form-control" placeholder="Prénom" name="firstname" value=form.firstname)
+
+            .input-group.mb-3
+                .input-group-prepend
+                    .input-group-text.d-none.d-lg-block
+                        i.fa.fa-phone
+                input(type="phone" class="form-control" placeholder="Téléphone" name="phone" value=form.phone) 
+    
+            .input-group.mb-3
+                .input-group-prepend
+                    .input-group-text.d-none.d-lg-block 
+                        i.fa.fa-restroom
+                select(class="form-control" placeholder="Rôle" name="role")
+                    option(value="user") Utilisateur
+                    option(value="admin" selected=form.role=='admin') Administrateur
+            .row
+                .col-lg-12
+                    button.btn.btn-primary.center-block(type="submit")= (route.indexOf('/admin/user/edit') != -1  ? 'Modifier' : 'Enregistrer' ) 

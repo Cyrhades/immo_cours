@@ -18,11 +18,29 @@ module.exports = class User {
         this.db = mongoose.model('User', UserSchema); 
     }
 
+    count(filter = {}) {
+        return new Promise((resolve, reject) => {
+            this.db.countDocuments(filter, function (err, data) {
+                if (err) reject(err);
+                resolve(data);
+            });
+        });
+    }
+
     add(userEntity) {
         return new Promise((resolve, reject) => {
             this.db.create(userEntity, function (err, user) {
                 if (err) reject(err);
                 resolve(user);
+            });
+        });
+    }
+
+    updateById(id, userEntity ) {
+        return new Promise((resolve, reject) => {
+            this.db.updateOne({_id : id}, userEntity, function (err) {
+                if (err) reject();
+                resolve();
             });
         });
     }
@@ -47,6 +65,34 @@ module.exports = class User {
                    resolve(user);
                 }  
                 reject(false);
+            });
+        });
+    }
+
+    find(filter = {}, limit = null, skip = null) {
+        return new Promise((resolve, reject) => {
+            this.db.find(filter).limit(limit).skip(skip).exec(function (err, data) {
+                if (err) reject(err);
+                resolve(data);
+            });
+        });
+    }
+    
+    findById(id) {
+        return new Promise((resolve, reject) => {
+            this.db.findById(id, function (err, user) {
+                if (err || user === null) reject();
+                resolve(user);
+            });
+        });
+    }
+
+    delete(filter = {}) {
+        return new Promise((resolve, reject) => {
+            this.db.deleteOne(filter, function (err) {
+                console.log(err);
+                if (err) reject(err);
+                resolve();
             });
         });
     }

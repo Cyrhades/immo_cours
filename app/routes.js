@@ -21,7 +21,7 @@ module.exports = (app) => {
         (new Register()).printForm(req, res);
     });
 
-    app.post('/inscription', (req, res) => {
+    app.post('/inscription', token.verify, (req, res) => {
         let Register = require('../src/controllers/Register.js');
         (new Register()).processForm(req, res);
     });
@@ -31,7 +31,7 @@ module.exports = (app) => {
         (new Authenticated()).printForm(req, res);
     });
 
-    app.post('/connexion', (req, res) => {
+    app.post('/connexion', token.verify, (req, res) => {
         let Authenticated = require('../src/controllers/Authenticated.js');
         (new Authenticated()).processForm(req, res);
     });
@@ -46,34 +46,28 @@ module.exports = (app) => {
         (new Dashboard()).print(req, res);
     });
 
-    app.get('/admin/realty', (req, res) => {
-        let Realty = require('../src/controllers/Realty.js');
-        (new Realty()).print(req, res);
-    });
 
-    app.get('/admin/realty/add', token.generate, (req, res) => {
-        let Realty = require('../src/controllers/Realty.js');
-        (new Realty()).printForm(req, res);
-    });
+    //---------------------------------------------------------
+    //  ADMIN Realty
+    //---------------------------------------------------------
+    let RealtyController = require('../src/controllers/Realty.js');
+    let Realty = new RealtyController();
+    app.get('/admin/realty', Realty.print.bind(Realty));
+    app.get('/admin/realty/add', token.generate, Realty.printForm);
+    app.post('/admin/realty/add', token.verify, Realty.processForm);
+    app.get('/admin/realty/delete/:id', Realty.delete);
+    app.get('/admin/realty/edit/:id', token.generate, Realty.printForm);
+    app.post('/admin/realty/edit/:id', token.verify, Realty.processForm);
 
-    app.post('/admin/realty/add', (req, res) => {
-        let Realty = require('../src/controllers/Realty.js');
-        (new Realty()).processForm(req, res);
-    });
-    
-    app.get('/admin/realty/delete/:id', (req, res) => {
-        let Realty = require('../src/controllers/Realty.js');
-        (new Realty()).delete(req, res);
-    });
-
-
-    app.get('/admin/realty/edit/:id', token.generate, (req, res) => {
-        let Realty = require('../src/controllers/Realty.js');
-        (new Realty()).printForm(req, res);
-    });
-
-    app.post('/admin/realty/edit/:id', (req, res) => {
-        let Realty = require('../src/controllers/Realty.js');
-        (new Realty()).processForm(req, res);
-    });
+    //---------------------------------------------------------
+    //  ADMIN User
+    //---------------------------------------------------------
+    let UserController = require('../src/controllers/User.js');
+    let User = new UserController();
+    app.get('/admin/User', User.print);
+    app.get('/admin/user/add', token.generate, User.printForm);
+    app.post('/admin/user/add', token.verify, User.processForm.bind(User));
+    app.get('/admin/user/delete/:id', User.delete);
+    app.get('/admin/user/edit/:id', token.generate, User.printForm);
+    app.post('/admin/user/edit/:id', token.verify, User.processForm);
 };
