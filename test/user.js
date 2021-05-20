@@ -1,6 +1,12 @@
 const assert = require('assert');
 const repoUser = require('../src/repository/User.js');
 
+before(function(done) {
+    require('mongoose').connection.once('open', () =>  {
+        done();
+    });    
+});
+
 describe(`Email existe / n'existe pas en BDD`, () => {
     it('email existant', (done) => {
         (new repoUser).emailExists('cyrhades76@gmail.com').then((result) => {
@@ -8,7 +14,7 @@ describe(`Email existe / n'existe pas en BDD`, () => {
             done();
         });
     });
-
+ 
     it('email inexistant', (done) => {
         (new repoUser).emailExists('cyrhades76+fake.notexists@gmail.com').then((result) => {
             // La promesse true ou false dans le resolve, car on l'utilise ainsi dans l'enregistrement d'utilisateur

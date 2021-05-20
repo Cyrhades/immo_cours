@@ -68,7 +68,7 @@ module.exports = class User {
             });
         });
     }
-
+ 
     find(filter = {}, limit = null, skip = null) {
         return new Promise((resolve, reject) => {
             this.db.find(filter).limit(limit).skip(skip).exec(function (err, data) {
